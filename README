@@ -1,0 +1,36 @@
+Author: Subhash Simhambhatla
+Title: Design considerations for project i
+------     "CS551: Fall 2010: Redesigning the internet" Part 1
+
+1. Initial RTO values: Assumed an initial RTO base value of 540000 ticks
+                      for all host and added an extra value dependent
+                      on source address of the host. This consideration
+                      has reduced the timeouts of retransmissions in 
+                      simulation
+                         
+                         Initial RTO = 540000 + (source Address)*1000
+
+2. Maximum number of retransmissions: Assumed the maximum number of 
+                      retransmissions needed to be 10 before the host
+                      gives up trying to establish a connection due to 
+                      network congestion.
+
+3. RTT computations  : Computed RTT at the reception of ACK. RTT not updated
+                      if the reception is for a retransmission.
+
+4. Average RTT calculation: Assumed alpha=0.8 to calculate RTT. Assumed 
+                      initial average RTT at the begining as 540000 ticks 
+                      and when RTT is computed first, average RTT is chosen
+                      to be equal to RTT.
+                       
+                      if i = 0
+                         average RTT = 540000
+                      else if i = 1
+                         average RTT = RTT
+                      else   
+                         averate RTT(i) = alpha * average RTT(i-1) + 
+                                           (1 - alpha) * RTT estimate
+5. Revised RTO estimation: Computed RTO after first reception as 
+                        
+                      RTO = Beta * RTT (Beta = 2)
+ 

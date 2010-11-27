@@ -1,0 +1,87 @@
+TARGET=netsim_app
+OBJECTS=main.o ZtpHost.o ZtpPacket.o app_config.o 
+LIBRARY=../netsim/libnetsim.a
+SOURCES=main.cpp ZtpHost.cpp ZtpPacket.cpp app_config.cpp
+CCFLAGS=-g
+
+all: netsim $(TARGET)
+
+netsim:
+	(cd ../netsim; make)
+
+$(TARGET): $(OBJECTS) $(LIBRARY)
+	g++ $(CCFLAGS) -o $(TARGET) $(OBJECTS) $(LIBRARY)
+
+%.o: %.cpp
+	g++ -c $(CCFLAGS) $*.cpp
+
+%.o: %.c
+	gcc -c $(CCFLAGS) $*.c
+
+depend: $(SOURCES)
+	(cd ../netsim; make depend)
+	makedepend $(SOURCES)
+
+clean:
+	(cd ../netsim; make clean)
+	rm *.o
+
+# DO NOT DELETE
+
+main.o: ../netsim/common.h /usr/include/sys/types.h /usr/include/features.h
+main.o: /usr/include/bits/predefs.h /usr/include/sys/cdefs.h
+main.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
+main.o: /usr/include/gnu/stubs-64.h /usr/include/bits/types.h
+main.o: /usr/include/bits/typesizes.h /usr/include/time.h
+main.o: /usr/include/endian.h /usr/include/bits/endian.h
+main.o: /usr/include/bits/byteswap.h /usr/include/sys/select.h
+main.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+main.o: /usr/include/bits/time.h /usr/include/sys/sysmacros.h
+main.o: /usr/include/bits/pthreadtypes.h /usr/include/stdlib.h
+main.o: /usr/include/alloca.h ../netsim/Config.h ../netsim/Packet.h
+main.o: ../netsim/Timer.h ../netsim/PacketScheduler.h ../netsim/Scheduler.h
+main.o: ../netsim/Topology.h /usr/include/unistd.h
+main.o: /usr/include/bits/posix_opt.h /usr/include/bits/confname.h
+main.o: /usr/include/getopt.h
+ZtpHost.o: ../netsim/common.h /usr/include/sys/types.h
+ZtpHost.o: /usr/include/features.h /usr/include/bits/predefs.h
+ZtpHost.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+ZtpHost.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+ZtpHost.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+ZtpHost.o: /usr/include/time.h /usr/include/endian.h
+ZtpHost.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
+ZtpHost.o: /usr/include/sys/select.h /usr/include/bits/select.h
+ZtpHost.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
+ZtpHost.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
+ZtpHost.o: /usr/include/stdlib.h /usr/include/alloca.h ../netsim/Node.h
+ZtpHost.o: ../netsim/FIFONode.h ../netsim/Packet.h ZtpPacket.h
+ZtpHost.o: ../netsim/Timer.h ../netsim/PacketScheduler.h
+ZtpHost.o: ../netsim/Scheduler.h ZtpHost.h
+ZtpPacket.o: ../netsim/common.h /usr/include/sys/types.h
+ZtpPacket.o: /usr/include/features.h /usr/include/bits/predefs.h
+ZtpPacket.o: /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h
+ZtpPacket.o: /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h
+ZtpPacket.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+ZtpPacket.o: /usr/include/time.h /usr/include/endian.h
+ZtpPacket.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
+ZtpPacket.o: /usr/include/sys/select.h /usr/include/bits/select.h
+ZtpPacket.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
+ZtpPacket.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
+ZtpPacket.o: /usr/include/stdlib.h /usr/include/alloca.h ../netsim/Node.h
+ZtpPacket.o: ../netsim/Packet.h ../netsim/Timer.h ../netsim/PacketScheduler.h
+ZtpPacket.o: ../netsim/FIFONode.h ../netsim/Scheduler.h ZtpPacket.h
+app_config.o: /usr/include/string.h /usr/include/features.h
+app_config.o: /usr/include/bits/predefs.h /usr/include/sys/cdefs.h
+app_config.o: /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h
+app_config.o: /usr/include/gnu/stubs-64.h /usr/include/xlocale.h
+app_config.o: ../netsim/common.h /usr/include/sys/types.h
+app_config.o: /usr/include/bits/types.h /usr/include/bits/typesizes.h
+app_config.o: /usr/include/time.h /usr/include/endian.h
+app_config.o: /usr/include/bits/endian.h /usr/include/bits/byteswap.h
+app_config.o: /usr/include/sys/select.h /usr/include/bits/select.h
+app_config.o: /usr/include/bits/sigset.h /usr/include/bits/time.h
+app_config.o: /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h
+app_config.o: /usr/include/stdlib.h /usr/include/alloca.h ../netsim/Node.h
+app_config.o: ../netsim/Packet.h ../netsim/Timer.h
+app_config.o: ../netsim/PacketScheduler.h ../netsim/FIFONode.h
+app_config.o: ../netsim/Scheduler.h ../netsim/Config.h ZtpHost.h

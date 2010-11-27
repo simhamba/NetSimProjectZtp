@@ -1,0 +1,17 @@
+# Dumbbell topology: 1,4 - 2 - 3 - 5,6
+Link(1, 2, 10, 1)
+Link(4, 2, 10, 1)
+Link(2, 3, 10, 1)
+Link(3, 5, 10, 1)
+Link(3, 6, 10, 1)
+
+# Hosts 1,4 are Senders, node 6,5 is the receiver, node 2,3 are a drop tail router
+Router(2, 10)
+Router(3, 10)
+Host(1)
+Host(4)
+Host(5)
+Host(6)
+
+FZTPFlow(1, 6, 500, "configFile")
+FZTPFlow(4, 5, 500, "configFile")
