@@ -236,7 +236,6 @@ ZtpHost::receive(Packet* pkt)
             // Tracer output
                 TRACE(TRL4, "Recieved ACK packet from Host %d to Host %d, seq number %d ack number %d\n", \
                 curPkt->source,curPkt->destination,curPkt->seqNumber, curPkt->ackNumber );
-            //((ZtpPacket*) pkt)->print();
             }
             break;
         }
@@ -269,7 +268,6 @@ ZtpHost::receive(Packet* pkt)
                 TRACE(TRL4, "Recieved data packet from Host %d to Host %d, seq number %d ack number %d\n", \
                 curPkt->source,curPkt->destination,curPkt->seqNumber, curPkt->ackNumber );
                 
-            //    curPkt->print_payload(&(curPkt->data[0]), (curPkt->data).size(),1);
             // Queue packet for application process action
                 ZtpPacket* appForwardPkt = new ZtpPacket (*curPkt);
                 (curTcb->recvPktQueue).push(appForwardPkt);
@@ -300,6 +298,9 @@ ZtpHost::receive(Packet* pkt)
                             curTcb->writeData(pkt, backupPktInfo->seqNo);
 
                         if(send(pkt)) {
+#ifndef DEBUG_MODE
+                            pkt->print();
+#endif
                             TRACE(TRL4, "Duplicate Ack: Sent packet from Host %d to Host %d, seq number %d ack number %d\n", \
                             pkt->source,pkt->destination,pkt->seqNumber, pkt->ackNumber );
                     // Update Tcb state info
@@ -465,6 +466,11 @@ ZtpHost::handle_timer(void* cookie)
                 curTcb->writeData(pkt, backupPktInfo->seqNo);
 
             if(send(pkt)) {
+
+#ifndef DEBUG_MODE
+                if (backupPktInfo->type == DATA_TYPE ||backupPktInfo->type == LAST_DATA_TYPE)
+                    pkt->print();
+#endif
                 TRACE(TRL4, "Timeout: Sent packet from Host %d to Host %d, seq number %d ack number %d\n", \
                 pkt->source,pkt->destination,pkt->seqNumber, pkt->ackNumber );
         // Update Tcb state info
@@ -586,6 +592,9 @@ ZtpHost::handle_timer(void* cookie)
                 
             // send data packet
                 if(send(pkt)) {
+#ifndef DEBUG_MODE
+                    pkt->print();
+#endif
                     TRACE(TRL4, "Sent data packet from Host %d to Host %d, seq number %d, ack number %d\n", \
                     pkt->source,pkt->destination,pkt->seqNumber, pkt->ackNumber );
             // Update Tcb state info
@@ -613,9 +622,15 @@ ZtpHost::handle_timer(void* cookie)
             ZtpPacket* appForwardPkt = (curTcb->recvPktQueue).top();
             while (curTcb->expectedSendSeqNo == appForwardPkt->seqNumber) {
                 curTcb->expectedSendSeqNo += (appForwardPkt->data).size() ;
+#ifdef DEBUG_MODE
                 (curTcb->rxStream).write(&(appForwardPkt->data[0]), (appForwardPkt->data).size() );
+#else
+                appForwardPkt->print();
+#endif
                 if ( appForwardPkt->isLastPacket() )  {
+#ifdef DEBUG_MODE
                     (curTcb->rxStream).close();
+#endif
         // Initiate close
         // Generate immediate teardown request by setting timer event on CLOSE_INITIATE
                     HostTimerData* context2 = new HostTimerData(curContext->key, CLOSE_INITIATE);
@@ -930,6 +945,7 @@ ZtpHost::initialize_receive(Address s, Time t, char* filePath)
     string rxFilePath (filePath);
     string adnlString ("Rx");
     rxFilePath = adnlString + filePath;
+#ifdef DEBUG_MODE
     (newTcb->rxStream).open(rxFilePath.data(), ios::out | ios::binary);
     if ((newTcb->rxStream).is_open() == false)
     {
@@ -937,6 +953,7 @@ ZtpHost::initialize_receive(Address s, Time t, char* filePath)
         remove(rxFilePath.data());
         FATAL("Cannot find %s\n", rxFilePath.data()); 
     }
+#endif
     
     AddressTuple addrTuple;
     addrTuple.FormTuple(s,d, sourcePort, destPort);

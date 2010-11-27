@@ -10,8 +10,7 @@
 void 
 ZtpHeader::print_ZtpHeader()
 {
-    TRACE(TRL3, "Sequence Number: %d, Acknowledgement Number: %d,SYN flag: %d, FIN flag: %d, ACK flag: %d\n",\
-            (int)seqNumber , (int)ackNumber ,(int)SYN, (int)FIN, (int)ACK );
+    TRACE(TRL3, "sequence number: %d\n",(int)seqNumber );
 }
 
 void
@@ -19,7 +18,7 @@ ZtpPacket::print()
 {
     Packet::print_header();
     ZtpHeader::print_ZtpHeader();
-//    Packet::print_payload((char *) &data[0], length - DATA_OFFSET, false);
+    Packet::print_payload((char *) &data[0], length - HEADER_SIZE, true);
 }
 
 bool

@@ -1,6 +1,7 @@
 #include <fstream>
 #include <queue>
 using namespace std;
+//#define DEBUG_MODE
 #define MAX_RTO (540000)
 #define MAX_RETRANSMISSIONS (8)
 #define SOURCE_SEQ_NO (12431)
@@ -106,7 +107,9 @@ class Tcb
     queue<ZtpPacketInfo*> backupPktInfoQueue;
     HostTimerData* timerCookie;
     ifstream txStream;
+#ifdef DEBUG_MODE 
     ofstream rxStream;
+#endif
     unsigned int cngWind; // sender window
     unsigned int baseSeqNo; // last sent data waiting to be acked
     unsigned int fileBase; 
